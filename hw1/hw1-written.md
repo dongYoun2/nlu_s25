@@ -11,7 +11,7 @@ The accuracies are in percentage, computed as a micro-accuracy, and rounded to t
 | Embedding Space | Semantic | Syntactic | Overall |
 | :-------------: | :------: | :-------: | :-----: |
 |    GloVe 50     |   40.0   |   27.6    |  33.2   |
-|    GloVe 100    |   44.5   |   27.8    |  35.5   |
+|    GloVe 100    |   44.5   |   27.8    |  35.4   |
 |    GloVe 200    |   31.7   |   21.7    |  26.2   |
 
 **Q4**
