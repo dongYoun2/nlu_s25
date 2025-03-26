@@ -2,16 +2,16 @@
 
 # Please adjust these settings according to your needs.
 #SBATCH --account=ds_ga_1012-2024sp
-#SBATCH --partition=n1s8-v100-1
+#SBATCH --partition=c12m85-a100-1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=1:00:00
-#SBATCH --mem=20GB
+#SBATCH --time=4:00:00
+#SBATCH --mem=32GB
 #SBATCH --gres=gpu:1
 #SBATCH --job-name=truthfulqa
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=your_email_address@nyu.edu
+#SBATCH --mail-user=dl5635@nyu.edu
 #SBATCH --output="truthfulqa.out"
 
 

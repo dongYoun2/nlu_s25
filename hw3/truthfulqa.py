@@ -165,7 +165,14 @@ class MultipleChoicePipeline(Pipeline):
                 text 5 corresponds to answer choice 1 for question 1,
                 etc.
         """
-        raise NotImplementedError("Problem 2c has not been completed yet!")
+        construct_input_text = lambda question, choice: f"{self._demos}Q: {question}\nA:{self._system_prompt} {choice}"
+        input_texts = []
+        for question, choices in zip(batch["question"], batch["choices"]):
+            texts_per_exapmle = [construct_input_text(question, choice) for choice in choices]
+            input_texts.extend(texts_per_exapmle)
+
+        return input_texts
+
 
     def preprocess(self, batch: Dict[str, Any]) -> Dict[str, torch.Tensor]:
         """
@@ -183,7 +190,11 @@ class MultipleChoicePipeline(Pipeline):
             These tensors should be stored on the GPU if it is being
             used; otherwise, they should be stored on the CPU
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+        input_texts = self._get_input_texts(batch)
+        input = self.tokenizer(input_texts, padding=True, return_tensors="pt")
+
+        return input
+
 
     def _forward(self, input_: Dict[str, torch.Tensor]) -> \
             Dict[str, torch.Tensor]:
@@ -198,7 +209,11 @@ class MultipleChoicePipeline(Pipeline):
         :return: The logit scores assigned to each next-token prediction
             as well as the input_ids tensor from input_
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+
+        with torch.no_grad():
+            outputs = self.model(**input_)
+
+        return {"input_ids": input_["input_ids"], "logits": outputs.logits}
 
     def postprocess(self, outputs: Dict[str, torch.Tensor]) -> Output:
         """
@@ -219,7 +234,35 @@ class MultipleChoicePipeline(Pipeline):
             responds to question i and column j corresponds to answer
             choice j
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+        logits = outputs["logits"]
+        input_ids = outputs["input_ids"]
+
+        B, L, V = logits.shape
+        Q, C = B // self.num_choices, self.num_choices
+
+        assert B % C == 0
+
+        # shift logits and input_ids to match the corresponding tokens
+        logits = logits[:, :-1, :]
+        input_ids = input_ids[:, 1:]
+
+        logits = logits.reshape(-1, V)
+        input_ids = input_ids.reshape(-1)
+
+        loss = self.loss_fn(logits, input_ids)
+
+        loss = loss.reshape(B, -1)  # (B, L-1)
+        loss = loss.sum(dim=1)
+        loss = loss.reshape(Q, C)
+
+        prediction = torch.argmin(loss, dim=1)
+
+        assert loss.shape == (Q, C)
+        assert prediction.shape == (Q,)
+
+        result = Output(loss=loss, prediction=prediction)
+
+        return result
 
 
 def run_model(pipeline: MultipleChoicePipeline, dataset: Dataset,
