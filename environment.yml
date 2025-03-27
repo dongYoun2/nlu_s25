@@ -11,6 +11,8 @@ dependencies:
   - torchvision
   - transformers
   - accelerate
+  - matplotlib
+  - seaborn
   - pip
   - pip:
       - datasets
