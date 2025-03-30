@@ -5,13 +5,14 @@ Q1) Among Figure 2 and Figure 4, which one shows the results for the main experi
 - **Main experiment**: Figure 2
 - **Additional experiment**: Figure 4
 
-Figure 2 effectively answers the yes/no question of "Does the larger model performs worse than the smaller model on TruthfulQA benchmark?" and the Figure 2 shows the additional evaluation on informativeness of gnereration task as well as truthfulness of multiple-choice task on the extension of the main experiment to further analyze.
+Figure 2 effectively answers the yes/no question of "Does the larger model performs worse than the smaller model on TruthfulQA benchmark?" and the Figure 4 shows the additional evaluation on informativeness of gnereration task as well as truthfulness of multiple-choice task on the extension of the main experiment to further analyze.
 
 
 Q2) Which set(s) of prompts from Appendix E were used for the main experiment, and which were used for the additional experiment(s)?
 
 - **Main experiment**: (default) QA prompt
-- **Additional experiment**: (default) QA prompt, harmful prompt, and helpful prompt
+- **Additional experiment (Figure 4)**: (default) QA prompt, harmful prompt, and helpful prompt
+- **Additional experiment (Figure 15 in Appendix B.6)**: (default) QA prompt, harmful prompt, helpful prompt, null prompt (no prompt at all), chat prompt, long-form prompt
 
 Figure 4 also shows how the harmful and helpful prompt could encourage the GPT-3-175B model to be more truthful or vice versa.
 
@@ -20,6 +21,7 @@ Figure 4 also shows how the harmful and helpful prompt could encourage the GPT-3
 
 
 Subsection 3.2 of the paper describes the procedures by which Lin et al. evaluate LLMs on TruthfulQA. According to the paper:
+
 Q1) What are the two methods by which an answer to a question is extracted from an LLM?
 
 - **Generation**: Model generates text using greedy decoding, and this text is used as an answer to the question.
